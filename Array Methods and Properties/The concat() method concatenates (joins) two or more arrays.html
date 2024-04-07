@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+
+
+<body>
+
+<h1>JavaScript Arrays</h1>
+<h2>Bracket Notation</h2>
+
+<p>The bracket notation [] returns an indexed element from an array.</p>
+
+<section style="display: grid; grid-template-columns: 1fr 1fr;  gap: 1rem">
+
+    <div> 
+        <h3>DEMO: </h3>
+
+
+        <!-- --------------------------------------------------------------------------------------
+            DEMO
+        ===========================================================================================
+        -->
+
+        <p>The concat() method concatenates (joins) two or more arrays:</p>
+
+        <p id="demo"></p>
+        <!-- --------------------------------------------------------------------------------------
+            / DEMO
+        ===========================================================================================
+        -->
+
+      
+
+    </div>
+
+    <div>    
+        <h3>CONSOLE: </h3>
+        <div id="console" style="background: #000000; color: #22ff00; padding: 2rem;height: 500px;"></div>
+    </div>
+
+</section>
+
+
+
+
+
+<script async src="/javascript/console.log.js"></script>
+
+
+<script>
+    // Initial arrays with some nested arrays and potential duplicate values
+const arr1 = [1, 2, [3, 4, 4]];
+const arr2 = [[5, 6], 7, 8, 1];
+
+// Combining the arrays using the spread operator
+const combinedArr = [...arr1, ...arr2];
+
+// Flattening the combined array and removing duplicate values
+// The Set object lets you store unique values of any type, whether primitive values or object references
+const uniqueFlattenedArr = Array.from(new Set(combinedArr.flat(Infinity)));
+
+// Sorting the array in ascending order
+const sortedArr = uniqueFlattenedArr.sort((a, b) => a - b);
+
+// Logging the processed array to the console
+console.log("Processed Array:", sortedArr);
+
+        </script>
+</body>
+</html>

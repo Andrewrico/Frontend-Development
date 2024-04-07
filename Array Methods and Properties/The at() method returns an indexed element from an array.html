@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<script async src="/javascript/console.log.js"></script>
+
+<body>
+
+<h1>JavaScript Arrays</h1>
+<h2>Bracket Notation</h2>
+
+<p>The bracket notation [] returns an indexed element from an array.</p>
+
+<section style="display: grid; grid-template-columns: 1fr 1fr;  gap: 1rem">
+
+    <div> 
+        <h3>DEMO: </h3>
+
+
+        <!-- --------------------------------------------------------------------------------------
+            DEMO
+        ===========================================================================================
+        -->
+
+
+        <div id="demo" style="background: #42433a; color: #fdfdfd; padding: 2rem;height: 500px;">
+            <select id="fruitSelector">
+                <option value="Banana">Banana</option>
+                <option value="Orange">Orange</option>
+                <option value="Apple">Apple</option>
+                <option value="Mango">Mango</option>
+            </select>
+            <h4 id="selectedFruit">Selected Fruit: None</h4>
+        </div>
+
+        <!-- --------------------------------------------------------------------------------------
+            / DEMO
+        ===========================================================================================
+        -->
+
+    </div>
+
+    <div>    
+        <h3>CONSOLE: </h3>
+        <div id="console" style="background: #000000; color: #22ff00; padding: 2rem;height: 500px;"></div>
+    </div>
+
+</section>
+
+
+
+<script>
+// Using the modern `addEventListener` to handle change events on the dropdown
+document.getElementById('fruitSelector').addEventListener('change', function() {
+    // Using `const` for variables that won't change
+    const selectedFruit = this.value;
+    
+    // Using template literals for easier HTML and string manipulation
+    document.getElementById('selectedFruit').innerHTML = `Selected Fruit: ${selectedFruit}`;
+    
+    // Log the selected fruit to the console
+    console.log(selectedFruit);
+});
+
+
+</script>
+
+</body>
+</html>

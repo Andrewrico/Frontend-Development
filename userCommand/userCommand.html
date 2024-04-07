@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Command Executor</title>
+</head>
+<body>
+    <input type="text" id="userCommand" placeholder="Enter your command">
+    <button onclick="executeCommand()">Execute</button>
+    <script>
+        function executeCommand() {
+            var command = document.getElementById('userCommand').value;
+            try {
+                eval(command);
+            } catch (e) {
+                console.error("Error executing command:", e);
+            }
+        }
+
+        const addSign = number => number >= 0 ? `+${number}` : `${number}`;
+
+    </script>
+</body>
+</html>
