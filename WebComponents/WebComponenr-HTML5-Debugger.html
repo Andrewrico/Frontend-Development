@@ -13,18 +13,21 @@
 
 <button>Click</button>
 
-<my-element target-element-id="body"></my-element>
+<button onclick="alert('hello')">Click me</button>
 
 
 
 
+<script src="/index.js"></script>
+
+<html5-debugger data-element="body"></html5-debugger>
 
 <script>
 const elementsArray = [];
 
-customElements.define('my-element', class extends HTMLElement {
+customElements.define('html5-debugger', class extends HTMLElement {
     connectedCallback() {
-        const targetElementId = this.getAttribute('target-element-id');
+        const targetElementId = this.getAttribute('data-element');
 
         if (!targetElementId) {
             console.error("Target element ID is required.");
@@ -37,11 +40,16 @@ customElements.define('my-element', class extends HTMLElement {
             console.error("Target element not found in the current page.");
             return;
         }
-
+        const currentDate = new Date();
         const elementInfo = this.extractElementInfo(targetElement);
         elementsArray.push(elementInfo);
-        console.log("Element Info Pushed to Array:", JSON.stringify(elementInfo, null, 2));
-        console.log("Current Array:", elementsArray); // Log the array after pushing element info
+        // Log the element info in a subtab
+        console.groupCollapsed("AR Debugger");
+        console.log(` AR Debugger | ${currentDate}`)
+        console.log("Array:", elementsArray); // Log the array after pushing element info
+        console.log("Data:", JSON.stringify(elementInfo, null, 2));
+        console.groupEnd();
+
     }
 
     extractElementInfo(element) {
@@ -76,12 +84,6 @@ customElements.define('my-element', class extends HTMLElement {
 
         return elementInfo;
     }
-});
-
-const button = document.querySelector("button");
-
-button.addEventListener("click", (event) => {
-  button.textContent = `Click count: ${event.detail}`;
 });
 </script>
 
