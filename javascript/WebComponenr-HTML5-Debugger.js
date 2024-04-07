@@ -18,18 +18,16 @@ const elementsArray = [];
   
           const currentDate = new Date();
           
-          // Iterate over each matching element
           targetElements.forEach(targetElement => {
               const elementInfo = this.extractElementInfo(targetElement);
               elementsArray.push(elementInfo);
           });
-  
-          // Log the element info in a subtab, outside of the loop
+
           console.groupCollapsed("AR Debugger");
           console.log(` AR Debugger | ${currentDate}`)
 
-          console.log("Array:", elementsArray); // Log the array after pushing element info
-          console.log("Data:", JSON.stringify(elementsArray, null, 2)); // Log the JSON version of the array
+          console.log("Array:", elementsArray); 
+          console.log("Data:", JSON.stringify(elementsArray, null, 2)); 
 
           console.groupEnd();
       }
