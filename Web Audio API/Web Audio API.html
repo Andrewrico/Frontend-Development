@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Audio Worklet and Microphone Example</title>
+</head>
+<body>
+    <button id="start">Start Audio Processing</button>
+    <script>
+        document.getElementById('start').addEventListener('click', async () => {
+            if (!navigator.mediaDevices.getUserMedia || !window.AudioContext || !AudioContext.prototype.audioWorklet) {
+                alert('Your browser does not support the required Web Audio API features.');
+                return;
+            }
+
+            // Define the AudioWorkletProcessor code
+            const processorCode = `
+                class MicrophoneProcessor extends AudioWorkletProcessor {
+                    process(inputs, outputs, parameters) {
+                        // This example doesn't process audio, but you could analyze or modify it here
+                        return true;
+                    }
+                }
+                registerProcessor('microphone-processor', MicrophoneProcessor);
+            `;
+
+            // Create a Blob from the processor code and generate a Blob URL
+            const blob = new Blob([processorCode], { type: 'application/javascript' });
+            const blobURL = URL.createObjectURL(blob);
+
+            try {
+                const audioContext = new AudioContext();
+                await audioContext.audioWorklet.addModule(blobURL);
+
+                // Request access to the microphone
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                const source = audioContext.createMediaStreamSource(stream);
+
+                // Connect the source to an instance of the worklet processor
+                const processorNode = new AudioWorkletNode(audioContext, 'microphone-processor');
+                source.connect(processorNode);
+                processorNode.connect(audioContext.destination); // Necessary for some browsers to keep the audio graph running
+
+                console.log('AudioWorklet loaded and microphone stream processed.');
+            } catch (error) {
+                console.error('Failed to load AudioWorklet or access microphone:', error);
+            }
+        });
+    </script>
+</body>
+</html>

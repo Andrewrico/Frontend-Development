@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<div 
+id="html-element"
+class="html-element"
+data-element="html-element"
+aria-label="html-element"
+onclick="function click() { alert('CLICK') }"
+>CLICK</div>
+    <script>
+
+        console.log("attributes:", document.getElementById('html-element').attributes)
+        console.log("childNodes:", document.getElementById('html-element').childNodes)
+        console.log("childNodes:", document.getElementById('html-element')..ownerDocument)
+    //     function getElementInfo(selector) {
+    // const element = document.querySelector(selector);
+    // const info = [];
+
+    // // Get attributes
+    // Array.from(element.attributes).forEach(attr => {
+    //     info.push({type: 'attribute', name: attr.name, value: attr.value});
+    // });
+
+    // // Get styles (inline styles only)
+    // Array.from(element.style).forEach(styleName => {
+    //     info.push({type: 'style', name: styleName, value: element.style[styleName]});
+    // });
+
+    // // Add more properties as needed
+    // // For example, getting text content
+    // info.push({type: 'property', name: 'textContent', value: element.textContent});
+
+    // return info;
+// } 
+
+// Example usage
+// const info = getElementInfo('#myElement'); // Replace '#myElement' with your actual selector
+// console.log(info);
+
+    </script>
+</body>
+</html>
