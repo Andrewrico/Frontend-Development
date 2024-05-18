@@ -18,6 +18,40 @@ document.addEventListener('rebuy:cart.change', (event) => {
     }
   });
   
+
+
+
+
+  /////////////////////////////////////
+
+
+
+
+  document.addEventListener('rebuy:cart.change', (event) => {
+    const currentCart = event.detail;
+    const previousCart = window.Rebuy.Cart.getCart(); // Get the previous state of the cart
+  
+    let quantityIncreased = false;
+  
+    // Check each item to see if the quantity has increased
+    currentCart.items.forEach((currentItem, index) => {
+      const previousItem = previousCart.items.find(item => item.id === currentItem.id);
+      if (previousItem && currentItem.quantity > previousItem.quantity) {
+        quantityIncreased = true;
+      }
+    });
+  
+    // If any item's quantity was increased, run the function
+    if (quantityIncreased) {
+      runMyFunction();
+    }
+  });
+  
+  // Define the function that should run when quantity increases
+  function runMyFunction() {
+    console.log('Running my function because an item quantity was increased');
+  }
+  
   // Define the function that should run when quantity increases
   function runMyFunction() {
     console.log('Running my function because an item quantity was increased');
