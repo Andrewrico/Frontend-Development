@@ -7,7 +7,9 @@ class PriceUpdater {
     this.elements = {};
     // Initialize event listeners
     this.initEventListeners();
+    console.log("INIT")
   }
+
 
   /**
    * Function to get the currency sign from the money format.
@@ -227,7 +229,7 @@ class PriceUpdater {
    * Determines the highest applicable discount value from site-wide, collection, and priority discounts.
    * @param {boolean} isSiteWideDiscountEnabled - Whether site-wide discounts are enabled.
    * @param {number} collectionDiscountValue - The value of the collection discount.
-    * @param {number} priorityDiscountValue - The value of the priority discount.
+   * @param {number} priorityDiscountValue - The value of the priority discount.
    * @param {number} sitewideDiscountValue - The value of the site-wide discount.
    * @returns {number} - The initial discount value.
    */
