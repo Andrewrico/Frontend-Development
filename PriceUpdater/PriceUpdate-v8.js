@@ -43,14 +43,13 @@
      */
     const updatePrice = (variant = window.loaded_variant) => {
       try {
-
         if (!variant) return;
 
         const discountAppliesTo = getElement('#discount_applies_to')?.value || '';
         const isSiteWideDiscountEnabled = window.themeVariables.settings.isSiteWideDiscountEnabled;
         const isCollectionDiscountEnabled = window.themeVariables.settings.isCollectionDiscountEnabled;
-        const collectionDiscountValue = parseFloat(getElement('#collection_discount')?.value) || 0;
-        const priorityDiscountValue = parseFloat(getElement('#priority_discount_value')?.value) || 0;
+        const collectionDiscountValue = parseFloat(getElement('#collection_discount')?.value || '0');
+        const priorityDiscountValue = parseFloat(getElement('#priority_discount_value')?.value || '0');
         const sitewideDiscountValue = window.themeVariables.settings.sitewideDiscountValue;
         const variantPrice = variant.price;
         const sellingPrice = variant.price;
@@ -69,7 +68,7 @@
           const sellingPlanDiscountNode = getElement('.og-incentive-text');
           if (OGsellingPlan) {
             sellingPlan = 'subscription';
-            subsavePercent = parseFloat(sellingPlanDiscountNode?.innerText.split('%')[0]) || 0;
+            subsavePercent = parseFloat(sellingPlanDiscountNode?.innerText.split('%')[0] || '0');
           }
         }
 
@@ -85,8 +84,8 @@
           { "variant_id": 44779292065958, "discount": "", "sub_price_override": "" }
         ];
 
-        const variantDiscount = parseFloat(variantsWithDiscounts.find(v => v.variant_id == variant.id)?.discount || 0);
-        const variantSubscriptionDiscountOverride = parseFloat(variantsWithDiscounts.find(v => v.variant_id == variant.id)?.sub_price_override || 0);
+        const variantDiscount = parseFloat(variantsWithDiscounts.find(v => v.variant_id == variant.id)?.discount || '0');
+        const variantSubscriptionDiscountOverride = parseFloat(variantsWithDiscounts.find(v => v.variant_id == variant.id)?.sub_price_override || '0');
 
         if (variantDiscount > 0) discountValue = variantDiscount;
         if (sellingPlan === 'subscription' && subsavePercent > 0) discountValue = subsavePercent;
@@ -175,18 +174,17 @@
       }
     };
 
-    /**
+     /**
      * Update the labels for one-time purchase pricing.
      * @param {number} discountedPrice - The final discounted price.
      * @param {number} variantPrice - The original variant price.
      * @param {number} discountValue - The discount value applied.
      */
-    const updateOneTimeLabels = (discountedPrice, variantPrice, discountValue) => {
+     const updateOneTimeLabels = (discountedPrice, variantPrice, discountValue) => {
       try {
-        const savingAmount = roundNumber(variantPrice / 100 - roundNumber(discountedPrice));
+        const savingAmount = roundNumber(variantPrice / 100 - parseFloat(roundNumber(discountedPrice)));
 
         if (discountValue > 0) {
-
           updateDiscountLabel('.price-save-label .case-1 span', `${Math.round(discountValue)}% OFF`);
           updateDiscountLabel('.price-save-label .case-2 span', `SAVE ${currencySign}${savingAmount}`);
           updateDiscountLabel('.price-save-label .case-3 span', `${discountValue}% OFF`);
@@ -212,7 +210,6 @@
       }
     };
 
-    
     /**
      * Helper function to update discount labels.
      * @param {string} selector - The CSS selector of the element.
