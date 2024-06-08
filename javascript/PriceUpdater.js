@@ -221,7 +221,6 @@ class PriceUpdater {
       this.getElement('#price_element + s').style.display = (discountedPrice === discountVariables.variantPrice / 100) ? 'none' : 'inline';
     }
   
-    // Update the DOM
     // Update the DOM elements for subscription-based pricing
     updateSubscriptionDOM(subsavePercent, discountedPrice, variantPrice, discountValue, additonalFixedPrice) {
         const totalDiscountRounded = subsavePercent - (subsavePercent % 5);
