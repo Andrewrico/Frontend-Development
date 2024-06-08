@@ -157,7 +157,7 @@
         const totalDiscountRounded = Math.floor(discountValue / 5) * 5;
         const savingAmount = roundNumber(variantPrice / 100 - roundNumber(discountedPrice));
 
-        updateDiscountLabel('.price-save-label .case-1', `<span class="product-thumbnail_badge" style="margin-right: 16px;">SAVE ${totalDiscountRounded}% OFF NOW & ON FUTURE ORDERS</span>`);
+        updateDiscountLabel('.price-save-label .case-1 span', `SAVE ${totalDiscountRounded}% OFF NOW & ON FUTURE ORDERS`);
         updateDiscountLabel('.price-save-label .case-2 span', `SAVE ${currencySign}${savingAmount}`);
         updateDiscountLabel('.price-save-label .case-3 span', `${discountValue}% OFF + ${subsavePercent}% OFF Extra`);
 
@@ -268,10 +268,9 @@
     };
 
     /**
-     * Event Listeners
-     *  variant:change
-     *  DOMContentLoaded
-     *  prive-update-status
+     *  variant:change <Event Listener>
+     *  DOMContentLoaded <Event Listener>
+     *  prive-update-status <Event Listener>
      */
     document.addEventListener('variant:change', (e) => {
       const variant = e.detail.variant;
