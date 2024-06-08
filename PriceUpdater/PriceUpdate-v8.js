@@ -54,14 +54,13 @@
         const sitewideDiscountValue = window.themeVariables.settings.sitewideDiscountValue;
         const variantPrice = variant.price;
         const sellingPrice = variant.price;
-
-        console.log("🚀 ~ updatePrice ~ discountAppliesTo:", discountAppliesTo, isSiteWideDiscountEnabled, isCollectionDiscountEnabled, collectionDiscountValue, priorityDiscountValue, sitewideDiscountValue);
-
         let discountValue = 0;
         let additionalFixedPrice = 0;
         let subscriptionDiscountOverride = 0;
         let sellingPlan = 'one-time';
         let subsavePercent = 0;
+
+        console.log("🚀 ~ updatePrice ~ discountAppliesTo:", discountAppliesTo, isSiteWideDiscountEnabled, isCollectionDiscountEnabled, collectionDiscountValue, priorityDiscountValue, sitewideDiscountValue);
 
         // Determine selling plan and discount values
         const OGsubsPlanNode = getElement('.og-optin-button');
@@ -187,9 +186,11 @@
         const savingAmount = roundNumber(variantPrice / 100 - roundNumber(discountedPrice));
 
         if (discountValue > 0) {
+
           updateDiscountLabel('.price-save-label .case-1 span', `${Math.round(discountValue)}% OFF`);
           updateDiscountLabel('.price-save-label .case-2 span', `SAVE ${currencySign}${savingAmount}`);
           updateDiscountLabel('.price-save-label .case-3 span', `${discountValue}% OFF`);
+
           document.querySelector('.price-save-label').style.display = 'flex';
         } else {
           document.querySelector('.price-save-label').style.display = 'none';
@@ -211,6 +212,7 @@
       }
     };
 
+    
     /**
      * Helper function to update discount labels.
      * @param {string} selector - The CSS selector of the element.
@@ -283,24 +285,18 @@
 
     document.addEventListener("DOMContentLoaded", (event) => {
       updatePrice();
-      console.log('sellingPlans', sellingPlans);
-
       if (sellingPlans > 0) {
         waitForElement(".og-offer").then(() => {
           setTimeout(() => {
-            updatePrice();
+        //    updatePrice();
             const OGoptOutBtn = getElement('.og-optout-button');
             const OGoptInBtn = getElement('.og-optin-button');
 
-            console.log('og loaded', OGoptInBtn, OGoptOutBtn);
-
             OGoptOutBtn.addEventListener('click', function() {
-              console.log('optout');
               updatePrice();
             });
 
             OGoptInBtn.addEventListener('click', function() {
-              console.log('optin');
               updatePrice();
             });
           }, 1500);
@@ -309,7 +305,7 @@
     });
 
     document.addEventListener("prive-update-status", function(e) {
-      console.log(`prive - update status event`);
+     // console.log(`prive - update status event`);
       const option1 = document.querySelectorAll('.variant-picker__option input:checked')[0]?.value || null;
       const option2 = document.querySelectorAll('.variant-picker__option input:checked')[1]?.value || null;
       const option3 = document.querySelectorAll('.variant-picker__option input:checked')[2]?.value || null;
