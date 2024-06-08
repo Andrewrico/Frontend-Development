@@ -1,9 +1,21 @@
 function initializePriceUpdater() {
   try {
-    // Initialize the selling plans and currency sign
+    // Declare all variables at the top
     const sellingPlans = 1;
     const currencySign = getCurrencySign();
     const elements = {};
+    const priceElement = getElement('#price_element');
+    const priceElementSlash = getElement('#price_element + s');
+    const discountAppliesToElement = getElement('#discount_applies_to');
+    const collectionDiscountElement = getElement('#collection_discount');
+    const priorityDiscountElement = getElement('#priority_discount_value');
+    const OGsubsPlanNode = getElement('.og-optin-button');
+    const sellingPlanDiscountNode = getElement('.og-incentive-text');
+    const OGoptOutBtn = getElement('.og-optout-button');
+    const OGoptInBtn = getElement('.og-optin-button');
+    const highlightSubscriptionPrice = getElement('.highlight-subscription-price');
+    const priceSaveLabelElement = getElement('.price-save-label');
+    const highlightOptOutSalePrice = getElement('.highlight-opt-out-sale-price');
 
     // Function to get the currency sign from the money format
     function getCurrencySign() {
@@ -34,7 +46,6 @@ function initializePriceUpdater() {
         const option2 = getOptionValue(1);
         const option3 = getOptionValue(2);
 
-        const priceElement = getElement('#price_element');
         if (!priceElement) return null;
 
         const productData = JSON.parse(priceElement.dataset.product);
@@ -85,10 +96,6 @@ function initializePriceUpdater() {
     // Get discount-related variables from the DOM and settings
     function getDiscountVariables() {
       try {
-        const discountAppliesToElement = getElement('#discount_applies_to');
-        const collectionDiscountElement = getElement('#collection_discount');
-        const priorityDiscountElement = getElement('#priority_discount_value');
-
         return {
           discountAppliesTo: discountAppliesToElement?.value || '',
           isSiteWideDiscountEnabled: window.themeVariables.settings.isSiteWideDiscountEnabled,
@@ -135,7 +142,6 @@ function initializePriceUpdater() {
     // Get the selling plan type (subscription or one-time)
     function getSellingPlan() {
       try {
-        const OGsubsPlanNode = getElement('.og-optin-button');
         const OGsellingPlan = OGsubsPlanNode ? OGsubsPlanNode.getAttribute('frequency') : null;
         return OGsellingPlan ? 'subscription' : 'one-time';
       } catch (error) {
@@ -146,7 +152,6 @@ function initializePriceUpdater() {
     // Get the subscription save percentage
     function getSubsavePercent(sellingPlan) {
       try {
-        const sellingPlanDiscountNode = getElement('.og-incentive-text');
         return sellingPlanDiscountNode ? parseFloat(sellingPlanDiscountNode.innerText.split('%')[0]) : 0;
       } catch (error) {
         console.error('Error in getSubsavePercent:', error);
@@ -222,13 +227,9 @@ function initializePriceUpdater() {
           updateOneTimeDOM(discountedPrice, discountVariables.variantPrice, discountValue, additionalFixedPrice);
         }
 
-        const priceElement = getElement('#price_element');
-        const priceElementSlash = getElement('#price_element + s');
-
         priceElement.innerHTML = currencySign + roundNumber(discountedPrice);
         priceElement.classList.toggle('price-black', discountedPrice === discountVariables.variantPrice / 100);
         priceElementSlash.style.display = (discountedPrice === discountVariables.variantPrice / 100) ? 'none' : 'inline';
-        
       } catch (error) {
         console.error('Error in updateDOMElements:', error);
       }
@@ -241,7 +242,6 @@ function initializePriceUpdater() {
         const savingAmount = roundNumber(variantPrice / 100 - discountedPrice);
 
         // Update the main price element
-        const priceElement = getElement('#price_element');
         priceElement.innerHTML = `${currencySign} ${roundNumber(discountedPrice)}`;
 
         // Update the discount labels
@@ -253,7 +253,6 @@ function initializePriceUpdater() {
         getElement('.price-save-label').style.display = 'flex';
 
         // Update highlighted prices if elements are present
-        const highlightSubscriptionPrice = getElement('.highlight-subscription-price');
         if (highlightSubscriptionPrice) {
           highlightSubscriptionPrice.textContent = `${currencySign}${roundNumber(discountedPrice)}`;
           updateHighlightPrice('.highlight-compare-at-price', `${currencySign}${(variantPrice / 100).toFixed(2)}`);
@@ -264,20 +263,12 @@ function initializePriceUpdater() {
       }
     }
 
-    /**
-     * Update the DOM elements for one-time purchase pricing.
-     * Sets the discounted price and updates the corresponding discount labels for one-time purchases.
-     * @param {number} discountedPrice - The final discounted price.
-     * @param {number} variantPrice - The original price of the variant.
-     * @param {number} discountValue - The calculated discount value.
-     * @param {number} additionalFixedPrice - Any additional fixed price discount.
-     */
+    // Update the DOM elements for one-time purchase pricing
     function updateOneTimeDOM(discountedPrice, variantPrice, discountValue, additionalFixedPrice) {
       try {
         const savingAmount = roundNumber(variantPrice / 100 - discountedPrice);
 
         // Update the main price element
-        const priceElement = getElement('#price_element');
         priceElement.innerHTML = `${currencySign}${roundNumber(discountedPrice)}`;
 
         // Update the discount labels
@@ -286,11 +277,9 @@ function initializePriceUpdater() {
         updateDiscountLabel('.price-save-label .case-3 span', `${discountValue}% OFF`);
 
         // Show or hide the price save label based on discount value
-        const priceSaveLabelElement = getElement('.price-save-label');
         priceSaveLabelElement.style.display = discountValue > 0 ? 'flex' : 'none';
 
         // Update highlighted prices if elements are present
-        const highlightOptOutSalePrice = getElement('.highlight-opt-out-sale-price');
         if (highlightOptOutSalePrice) {
           const oneTimeDiscountedPrice = (variantPrice * ((100 - discountValue) / 100)) / 100;
           if (oneTimeDiscountedPrice != (variantPrice / 100)) {
@@ -306,12 +295,7 @@ function initializePriceUpdater() {
       }
     }
 
-    /**
-     * Helper function to update discount labels.
-     * Sets the inner HTML of the specified element to the given text content.
-     * @param {string} selector - The CSS selector of the element to be updated.
-     * @param {string} textContent - The text content to set in the element.
-     */
+    // Helper function to update discount labels
     function updateDiscountLabel(selector, textContent) {
       try {
         const element = getElement(selector);
@@ -323,12 +307,7 @@ function initializePriceUpdater() {
       }
     }
 
-    /**
-     * Helper function to update highlighted prices.
-     * Sets the text content of the specified element to the given value.
-     * @param {string} selector - The CSS selector of the element to be updated.
-     * @param {string} textContent - The text content to set in the element.
-     */
+    // Helper function to update highlighted prices
     function updateHighlightPrice(selector, textContent) {
       try {
         const element = getElement(selector);
@@ -340,12 +319,7 @@ function initializePriceUpdater() {
       }
     }
 
-    /**
-     * Wait for a specific element to appear in the DOM.
-     * Observes the DOM for changes and resolves the promise when the specified element appears.
-     * @param {string} selector - The CSS selector of the element to wait for.
-     * @returns {Promise<Element>} - A promise that resolves with the element once it appears in the DOM.
-     */
+    // Wait for a specific element to appear in the DOM
     function waitForElement(selector) {
       return new Promise((resolve, reject) => {
         try {
@@ -409,12 +383,9 @@ function initializePriceUpdater() {
       }
     });
 
-    // Initialize opt-in and opt-out buttons and add event listeners to them.
+    // Initialize opt-in and opt-out buttons and add event listeners to them
     function initOptInOutButtons() {
       try {
-        const OGoptOutBtn = getElement('.og-optout-button');
-        const OGoptInBtn = getElement('.og-optin-button');
-
         if (OGoptOutBtn && OGoptInBtn) {
           OGoptOutBtn.addEventListener('click', () => {
             try {
@@ -436,7 +407,7 @@ function initializePriceUpdater() {
       }
     }
 
-    // Handle the prive update status event.
+    // Handle the prive update status event
     function handlePriveUpdate() {
       try {
         const selectedVariant = getSelectedVariant();
