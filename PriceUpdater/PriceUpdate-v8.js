@@ -6,8 +6,6 @@
     const currencySign = moneyFormat.slice(0, 1);
     const elements = {};
 
-    console.log('Selling plans:', sellingPlans);
-
     /**
      * Helper function to get and cache DOM elements.
      * @param {string} selector - The CSS selector of the element.
@@ -45,8 +43,6 @@
      */
     const updatePrice = (variant = window.loaded_variant) => {
       try {
-        console.log("🚀 ~ updatePrice called");
-        console.log("🚀 ~ variant ~ variant:", variant);
 
         if (!variant) return;
 
@@ -104,7 +100,7 @@
           }
         }
 
-        console.log('values', sellingPlan, subsavePercent, discountValue);
+       // console.log('values', sellingPlan, subsavePercent, discountValue);
 
         // Calculate the discounted price
         let discountedPrice = sellingPlan === 'subscription'
@@ -272,8 +268,12 @@
       });
     };
 
-    // Event Listeners
-
+    /**
+     * Event Listeners
+     *  variant:change
+     *  DOMContentLoaded
+     *  prive-update-status
+     */
     document.addEventListener('variant:change', (e) => {
       const variant = e.detail.variant;
       setTimeout(() => {
