@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Selector</title>
+</head>
+<body>
+    <section>
+        <div class="form__wrapper">
+            <form action="" id="form" class="form">
+                <div class="product-select">
+                    <select name="product" id="select-product" class="master-select">
+                        <option value="Black / S" data-quantity="1">Black / S</option>
+                        <option value="Black / M" data-quantity="0">Black / M</option>
+                        <option value="Red / S" data-quantity="10">Red / S</option>
+                        <option value="Red / M" data-quantity="100">Red / M</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="radio" name="option1" value="Black"> Black <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option1" value="Red"> Red <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option2" value="S"> S <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option2" value="M"> M <br />
+                    </label>
+                </div>
+                <small class="product-select-message">Select product...</small>
+                <br>
+                <div class="bundle-select">
+                    <select name="product" id="select-bundle" class="master-select">
+                        <option value="Black / S" data-quantity="1">Black / S</option>
+                        <option value="Black / M" data-quantity="100">Black / M</option>
+                        <option value="Red / S" data-quantity="10">Red / S</option>
+                        <option value="Red / M" data-quantity="0">Red / M</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="radio" name="bundle_option1" value="Black"> Black <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option1" value="Red"> Red <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option2" value="S"> S <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option2" value="M"> M <br />
+                    </label>
+                </div>
+                <small class="bundle-select-message">Select product...</small>
+                <br>
+                <button type="submit" id="addToCart">ADD TO CART</button>
+            </form>
+        </div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('form');
+            const productSelect = document.getElementById('select-product');
+            const bundleSelect = document.getElementById('select-bundle');
+            const productOptions = document.querySelectorAll('input[name="option1"], input[name="option2"]');
+            const bundleOptions = document.querySelectorAll('input[name="bundle_option1"], input[name="bundle_option2"]');
+            const addToCartButton = document.getElementById('addToCart');
+            const productSelectMessage = document.querySelector('.product-select-message');
+            const bundleSelectMessage = document.querySelector('.bundle-select-message');
+
+            function updateOptions(select, options) {
+                const selectedValue = select.value.split(" / ");
+                const selectedColor = selectedValue[0];
+                const selectedSize = selectedValue[1];
+
+                options.forEach(option => {
+                    const optionValue = option.value;
+                    const dataQuantity = select.querySelector(`option[value="${selectedColor} / ${selectedSize}"]`).dataset.quantity;
+
+                    if (option.name.includes('option1') || option.name.includes('bundle_option1')) {
+                        if (optionValue === selectedColor && dataQuantity === "0") {
+                            option.disabled = true;
+                        } else {
+                            option.disabled = false;
+                        }
+                    }
+
+                    if (option.name.includes('option2') || option.name.includes('bundle_option2')) {
+                        if (optionValue === selectedSize && dataQuantity === "0") {
+                            option.disabled = true;
+                        } else {
+                            option.disabled = false;
+                        }
+                    }
+                });
+
+                // Check the appropriate radio buttons based on the selected value
+                options.forEach(option => {
+                    if (option.name.includes('option1') || option.name.includes('bundle_option1')) {
+                        option.checked = (option.value === selectedColor);
+                    }
+                    if (option.name.includes('option2') || option.name.includes('bundle_option2')) {
+                        option.checked = (option.value === selectedSize);
+                    }
+                });
+
+                // Update the Add to Cart button and message
+                const selectedOption = select.querySelector(`option[value="${selectedColor} / ${selectedSize}"]`);
+                const quantity = parseInt(selectedOption.dataset.quantity);
+                if (quantity === 0) {
+                    addToCartButton.disabled = true;
+                    if (select === productSelect) {
+                        productSelectMessage.textContent = "Selected product is out of stock.";
+                    } else {
+                        bundleSelectMessage.textContent = "Selected product is out of stock.";
+                    }
+                } else {
+                    addToCartButton.disabled = false;
+                    if (select === productSelect) {
+                        productSelectMessage.textContent = "Product is available.";
+                    } else {
+                        bundleSelectMessage.textContent = "Product is available.";
+                    }
+                }
+            }
+
+            function updateSelect(select, options) {
+                let selectedColor = '';
+                let selectedSize = '';
+
+                options.forEach(option => {
+                    if (option.checked) {
+                        if (option.name.includes('option1') || option.name.includes('bundle_option1')) {
+                            selectedColor = option.value;
+                        }
+
+                        if (option.name.includes('option2') || option.name.includes('bundle_option2')) {
+                            selectedSize = option.value;
+                        }
+                    }
+                });
+
+                if (selectedColor && selectedSize) {
+                    select.value = `${selectedColor} / ${selectedSize}`;
+                }
+
+                // Update the Add to Cart button and message
+                updateOptions(select, options);
+            }
+
+            productSelect.addEventListener('change', () => updateOptions(productSelect, productOptions));
+            bundleSelect.addEventListener('change', () => updateOptions(bundleSelect, bundleOptions));
+
+            productOptions.forEach(option => option.addEventListener('change', () => updateSelect(productSelect, productOptions)));
+            bundleOptions.forEach(option => option.addEventListener('change', () => updateSelect(bundleSelect, bundleOptions)));
+
+            // Initialize options
+            updateOptions(productSelect, productOptions);
+            updateOptions(bundleSelect, bundleOptions);
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const selectedProduct = productSelect.value;
+                const selectedBundle = bundleSelect.value;
+                alert(`Selected Product: ${selectedProduct}\nSelected Bundle: ${selectedBundle}`);
+            });
+        });
+    </script>
+</body>
+</html>

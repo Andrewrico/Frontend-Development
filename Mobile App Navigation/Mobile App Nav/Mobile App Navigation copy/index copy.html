@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Mobile Navigation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        
+    </style>
+</head>
+<body>
+    <div id="mobile-nav" aria-label="Mobile Navigation" class="mobile-nav">
+        <nav role="navigation">
+            <span class="visually-hidden">Mobile Navigation - For Mobile viewports - This is hidden, only available for screen readers</span>
+            <ul id="menu1" role="menubar">
+                <li role="none">
+                    <button type="button" aria-haspopup="true" aria-controls="submenu1" aria-expanded="false" id="menu1-button">MENU 1</button>
+                    <ul id="submenu1" role="menu" aria-labelledby="menu1-button" hidden>
+                        <li role="none"><a href="#" role="menuitem">Item 1-1</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 1-2</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 1-3</a></li>
+                    </ul>
+                </li>
+                <li role="none"><a href="#" role="menuitem">Item 2</a></li>
+                <li role="none"><a href="#" role="menuitem">Item 3</a></li>
+                <li role="none">
+                    <button type="button" aria-haspopup="true" aria-controls="submenu2" aria-expanded="false" id="menu2-button">MENU 2</button>
+                    <ul id="submenu2" role="menu" aria-labelledby="menu2-button" hidden>
+                        <li role="none">
+                            <button type="button" aria-haspopup="true" aria-controls="submenu3" aria-expanded="false" id="submenu2-button">Submenu 2-1</button>
+                            <ul id="submenu3" role="menu" aria-labelledby="submenu2-button" data-menu-level="3" hidden>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-1</a></li>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-2</a></li>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-3</a></li>
+                            </ul>
+                        </li>
+                        <li role="none"><a href="#" role="menuitem">Item 2-2</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 2-3</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <script>
+   
+    </script>
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js"></script>
+    <style>
+   /* Remove the default outline and 
+add the outset shadow */  
+[aria-pressed]:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.25rem yellow;
+}
+
+/* Make sure both the inset and 
+outset shadow are present */  
+[aria-pressed="true"]:focus {
+  box-shadow: 0 0 0 0.25rem yellow,
+              inset 0 0 0 0.15rem #000, 
+              inset 0.25em 0.25em 0 #fff;  
+}
+        </style>
+</head>
+<body>
+
+    <div>
+      <button type="button" aria-pressed="false" id="button">  
+        Play
+      </button>  
+       </div>
+       <script>
+
+
+document.querySelector('#button').addEventListener('click', (e) => {  
+  let pressed = e.target.getAttribute('aria-pressed') === 'true';
+  let text = e.target.textContent === 'Pause' ? 'Play' : 'Pause';
+  e.target.textContent = text;
+  e.target.setAttribute('aria-pressed', String(!pressed));
+  alert(pressed)
+});
+
+
+
+      </script>
+    
+</body>
+</html>

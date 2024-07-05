@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+
+    <div aria-label="Mobile Navigation">
+        <nav role="navigation">
+            <span class="visually-hidden">Mobile Navigation - For Mobile viewports - This is hidden, only available for screen readers</span>
+            <ul id="menu" data-menu-label="1">
+                <li>
+                    <button type="button" aria-controls="menu" aria-pressed="false" aria-expanded="false">l2 MENU 1</button>
+                    <ul id="submenu" data-menu-label="2">
+                        <li>
+                            <a href="#">Item</a>
+                        </li>
+                        <li>
+                            <a href="#">Item</a>
+                        </li>
+                        <li>
+                            <a href="#">Item</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Item</a>
+                </li>
+                <li>
+                    <a href="#">Item</a>
+                </li>
+                <li>
+                    <button type="button" aria-controls="menu" aria-pressed="false" aria-expanded="false">l2 MENU 2</button>
+                    <ul id="submenu" data-menu-label="2">
+                        <li>
+                            <button type="button" aria-controls="menu" aria-pressed="false" aria-expanded="false">l3 MENU 1</button>
+                            <ul id="submenu" data-menu-label="3" >
+                                <li>
+                                    <a href="#">Item</a>
+                                </li>
+                                <li>
+                                    <a href="#">Item</a>
+                                </li>
+                                <li>
+                                    <a href="#">Item</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Item</a>
+                        </li>
+                        <li>
+                            <a href="#">Item</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            
+        </nav>
+    </div>
+
+
+
+
+       <script>
+
+
+// const toggle = document.querySelector('#button');
+// const menu = document.querySelector('#menu');
+
+// toggle.addEventListener('click', (e) => {  
+
+//     let pressed = e.target.getAttribute('aria-pressed') === 'true';
+//     let text = e.target.textContent === 'Pause' ? 'Play' : 'Pause';
+  
+//     e.target.textContent = text;
+//     e.target.setAttribute('aria-pressed', String(!pressed));
+//     alert(pressed)
+
+//   if (menu.classList.contains('is-active')) {
+//     this.setAttribute('aria-expanded', 'false');
+//     menu.classList.remove('is-active');
+//   } else {
+//     menu.classList.add('is-active'); 
+//     this.setAttribute('aria-expanded', 'true');
+//   }
+// });
+
+</script>
+
+
+    
+</body>
+</html>

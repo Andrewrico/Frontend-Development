@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Selector</title>
+</head>
+<body>
+    <section>
+        <div class="form__wrapper">
+            <form action="" id="form" class="form">
+                <div class="product-select">
+                    <select name="product" id="select-product" class="master-select">
+                        <option value="Black / S" data-quantity="1">Black / S</option>
+                        <option value="Black / M" data-quantity="0">Black / M</option>
+                        <option value="Red / S" data-quantity="10">Red / S</option>
+                        <option value="Red / M" data-quantity="100">Red / M</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="radio" name="option1" value="Black"> Black <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option1" value="Red"> Red <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option2" value="S"> S <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="option2" value="M"> M <br />
+                    </label>
+                </div>
+                <small class="product-select-message">Select product...</small>
+                <br>
+                <div class="bundle-select">
+                    <select name="product" id="select-bundle" class="master-select">
+                        <option value="Black / S" data-quantity="1">Black / S</option>
+                        <option value="Black / M" data-quantity="100">Black / M</option>
+                        <option value="Red / S" data-quantity="10">Red / S</option>
+                        <option value="Red / M" data-quantity="0">Red / M</option>
+                    </select>
+                    <br>
+                    <label>
+                        <input type="radio" name="bundle_option1" value="Black"> Black <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option1" value="Red"> Red <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option2" value="S"> S <br />
+                    </label>
+                    <label>
+                        <input type="radio" name="bundle_option2" value="M"> M <br />
+                    </label>
+                </div>
+                <small class="bundle-select-message">Select product...</small>
+                <br>
+                <button type="submit" id="addToCart">ADD TO CART</button>
+            </form>
+        </div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById('form');
+            const productSelect = document.getElementById('select-product');
+            const bundleSelect = document.getElementById('select-bundle');
+            const addToCartButton = document.getElementById('addToCart');
+            const productSelectMessage = document.querySelector('.product-select-message');
+            const bundleSelectMessage = document.querySelector('.bundle-select-message');
+
+            function updateOptions(select, message) {
+                const selectedValue = select.value.split(" / ");
+                const selectedColor = selectedValue[0];
+                const selectedSize = selectedValue[1];
+                const options = document.querySelectorAll(`input[name^="${select.id.includes('product') ? 'option' : 'bundle_option'}"]`);
+                let quantity = parseInt(select.querySelector(`option[value="${select.value}"]`).dataset.quantity);
+
+                options.forEach(option => {
+                    if (option.name.includes('option1') && option.value === selectedColor) {
+                        option.checked = true;
+                        option.disabled = quantity === 0;
+                    }
+                    if (option.name.includes('option2') && option.value === selectedSize) {
+                        option.checked = true;
+                        option.disabled = quantity === 0;
+                    }
+                });
+
+                if (quantity === 0) {
+                    addToCartButton.disabled = true;
+                    message.textContent = "Selected product is out of stock.";
+                } else {
+                    addToCartButton.disabled = false;
+                    message.textContent = "Product is available.";
+                }
+            }
+
+            productSelect.addEventListener('change', () => updateOptions(productSelect, productSelectMessage));
+            bundleSelect.addEventListener('change', () => updateOptions(bundleSelect, bundleSelectMessage));
+
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const selectId = this.name.includes('option') ? 'select-product' : 'select-bundle';
+                    const select = document.getElementById(selectId);
+                    const message = this.name.includes('option') ? productSelectMessage : bundleSelectMessage;
+                    const selectedColor = document.querySelector(`input[name^="${this.name.includes('option') ? 'option1' : 'bundle_option1'}"]:checked`).value;
+                    const selectedSize = document.querySelector(`input[name^="${this.name.includes('option') ? 'option2' : 'bundle_option2'}"]:checked`).value;
+                    select.value = `${selectedColor} / ${selectedSize}`;
+                    updateOptions(select, message);
+                });
+            });
+
+            // Initialize options
+            updateOptions(productSelect, productSelectMessage);
+            updateOptions(bundleSelect, bundleSelectMessage);
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const selectedProduct = productSelect.value;
+                const selectedBundle = bundleSelect.value;
+                alert(`Selected Product: ${selectedProduct}\nSelected Bundle: ${selectedBundle}`);
+            });
+        });
+    </script>
+</body>
+</html>

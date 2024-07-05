@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Mobile Navigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #007bff;
+            color: #fff;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+        }
+
+        ul[role="menubar"] {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul[role="menu"] {
+            display: none;
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: #fff;
+            border: 1px solid #ddd;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        ul[role="menu"].visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        ul[role="menu"][data-menu-level="3"] {
+            left: 100%;
+            top: 0;
+            bottom: auto;
+            transform: translateX(-10px);
+        }
+
+        ul[role="menu"][data-menu-level="3"].visible {
+            transform: translateX(0);
+        }
+
+        button {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        a:hover {
+            background: #f0f0f0;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            margin: -1px;
+            padding: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="mobile-nav" aria-label="Mobile Navigation" class="mobile-nav">
+        <nav role="navigation">
+            <span class="visually-hidden">Mobile Navigation - For Mobile viewports - This is hidden, only available for screen readers</span>
+            <ul id="menu1" role="menubar">
+                <li role="none">
+                    <button type="button" aria-haspopup="true" aria-controls="submenu1" aria-expanded="false" id="menu1-button">MENU 1</button>
+                    <ul id="submenu1" role="menu" aria-labelledby="menu1-button" hidden>
+                        <li role="none"><a href="#" role="menuitem">Item 1-1</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 1-2</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 1-3</a></li>
+                    </ul>
+                </li>
+                <li role="none"><a href="#" role="menuitem">Item 2</a></li>
+                <li role="none"><a href="#" role="menuitem">Item 3</a></li>
+                <li role="none">
+                    <button type="button" aria-haspopup="true" aria-controls="submenu2" aria-expanded="false" id="menu2-button">MENU 2</button>
+                    <ul id="submenu2" role="menu" aria-labelledby="menu2-button" hidden>
+                        <li role="none">
+                            <button type="button" aria-haspopup="true" aria-controls="submenu3" aria-expanded="false" id="submenu2-button">Submenu 2-1</button>
+                            <ul id="submenu3" role="menu" aria-labelledby="submenu2-button" data-menu-level="3" hidden>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-1</a></li>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-2</a></li>
+                                <li role="none"><a href="#" role="menuitem">Item 2-1-3</a></li>
+                            </ul>
+                        </li>
+                        <li role="none"><a href="#" role="menuitem">Item 2-2</a></li>
+                        <li role="none"><a href="#" role="menuitem">Item 2-3</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <script>
+        class MobileNav {
+            constructor(navId) {
+                this.nav = document.getElementById(navId);
+                this.buttons = [];
+                this.init();
+            }
+
+            init() {
+                this.buttons = this.nav.querySelectorAll('button[aria-haspopup="true"]');
+                this.addEventListeners();
+                this.addLinkListeners();
+            }
+
+            addEventListeners() {
+                this.buttons.forEach(button => {
+                    button.addEventListener('click', this.toggleMenu.bind(this));
+                });
+
+                document.addEventListener('click', (event) => {
+                    if (!this.nav.contains(event.target)) {
+                        this.closeAllMenus();
+                    }
+                });
+            }
+
+            addLinkListeners() {
+                const links = this.nav.querySelectorAll('a[role="menuitem"]');
+                links.forEach(link => {
+                    link.addEventListener('click', () => {
+                        this.closeAllMenus();
+                    });
+                });
+            }
+
+            toggleMenu(event) {
+                const button = event.currentTarget;
+                const expanded = button.getAttribute('aria-expanded') === 'true';
+                
+                if (expanded) {
+                    this.closeMenu(button);
+                } else {
+                    this.closeSiblingMenus(button);
+                    this.openMenu(button);
+                }
+            }
+
+            openMenu(button) {
+                button.setAttribute('aria-expanded', 'true');
+                const menu = document.getElementById(button.getAttribute('aria-controls'));
+                menu.hidden = false;
+                // Force reflow to enable transition
+                requestAnimationFrame(() => {
+                    menu.classList.add('visible');
+                });
+            }
+
+            closeMenu(button) {
+                button.setAttribute('aria-expanded', 'false');
+                const menu = document.getElementById(button.getAttribute('aria-controls'));
+                menu.classList.remove('visible');
+                menu.addEventListener('transitionend', () => {
+                    menu.hidden = true;
+                }, { once: true });
+            }
+
+            closeAllMenus() {
+                this.buttons.forEach(button => {
+                    this.closeMenu(button);
+                });
+            }
+
+            closeSiblingMenus(button) {
+                const parentMenu = button.closest('ul[role="menu"], ul[role="menubar"]');
+                parentMenu.querySelectorAll('button[aria-expanded="true"]').forEach(sibling => {
+                    if (sibling !== button) {
+                        this.closeMenu(sibling);
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            new MobileNav('mobile-nav');
+        });
+    </script>
+</body>
+</html>
